@@ -74,18 +74,18 @@ int logbase(int a, int base) {
    return (int)(log(a) / log(base));
 }
 
-int cyclicalAttack(int C, int d, int n) {
+int cyclicalAttack(int C, int e, int n) {
   std::vector<int> result = {};
-  result.push_back(exponenciacion(C, d, n));
+  result.push_back(exponenciacion(C, e, n));
   while(result[result.size() - 1] != C) {
-    result.push_back(exponenciacion(result[result.size() - 1], d, n));
-    if(exponenciacion(result[result.size() - 1], d, n) == C) {
-      return result[result.size() - 1];
+    result.push_back(exponenciacion(result[result.size() - 1], e, n));
+    if(result[result.size() - 1] == C) {
+      return result[result.size() - 2];
     }
   }
 }
 
-void RSA(int p, int q, int d, int C) {
+/*void RSA(int p, int q, int d, int C) {
   if(primality(p) && primality(q)) {  //Se cumprueba si p y q son primos con el tests Lehmann-Peralta
     int phi = (p - 1) * (q - 1); //Se calcula phi
     std::vector<int> result = euclides(phi, d); //Se comprueba que d y phi son primos (mcd = 1) y se calcula el inverso de d
@@ -93,7 +93,7 @@ void RSA(int p, int q, int d, int C) {
       int e = result[0]; // e = inverso de d
       int n = p * q; //Se calcula n
       int cypher = exponenciacion(C, e, n); //Se calcula el criptograma cifrado
-      int attack = cyclicalAttack(C, d, n);
+      int attack = cyclicalAttack(C, e, n);
       std::cout << BOLDRED << "Se ha capturado el criptograma y realizado un ataque por cifrado cíclico. La clave enmascarada es: " << RESET << attack << std::endl; 
     } else {
       std::cout << "Los enteros " << d << " y " << phi << " no son primos" << std::endl;
@@ -101,21 +101,21 @@ void RSA(int p, int q, int d, int C) {
   } else {
     std::cout << "Los enteros " << p << " y " << q << " no son primos" << std::endl; 
   }
-}
+}*/
 
 
 int main(void) {
-  int p, q, d, C;
+  int n, e, C;
   std::cout << "ATAQUE POR CIFRADO CÍCLICO A RSA\n";
-  std::cout << "Introduzca el número primo p: ";
-  std::cin >> p;
-  std::cout << "\nIntroduzca el número primo q: ";
-  std::cin >> q;
-  std::cout << "\nIntroduzca el número entero d: ";
-  std::cin >> d;
-  std::cout << "\nIntroduzca el criptograma: ";
+  std::cout << "Introduzca la clave pública:\nn:  ";
+  std::cin >> n;
+  std::cout << "\ne: ";
+  std::cin >> e;
+  std::cout << "\nIntroduzca el criptograma capturado: ";
   std::cin >> C;
   std::cout << std::endl; 
-  RSA(p, q, d, C);
+  int attack = cyclicalAttack(C, e, n);
+  std::cout << BOLDRED << "Se ha capturado el criptograma y realizado un ataque por cifrado cíclico. La clave enmascarada es: " << RESET << attack << std::endl; 
+
   return 0; 
 }
